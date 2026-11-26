@@ -24,7 +24,7 @@ class AuthController extends Controller
             'role' => 'user',
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = auth('api')->login($user);
 
         return response()->json([
             'status' => true,
@@ -37,7 +37,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
@@ -51,7 +51,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = auth('api')->attempt($credentials);
 
         return response()->json([
             'status' => true,
@@ -64,7 +64,7 @@ class AuthController extends Controller
     
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        auth('api')->logout();
 
         return response()->json([
             'status' => true,

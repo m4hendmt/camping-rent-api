@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\AuthController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
+})->middleware('auth:api');
 
 Route::get('/payments', [PaymentController::class, 'index']);
 Route::get('/payments/{id}', [PaymentController::class, 'show']);
@@ -18,7 +18,7 @@ Route::get('/payments/{id}', [PaymentController::class, 'show']);
 Route::get('/items', [ItemController::class, 'index']);
 Route::get('/items/{id}', [ItemController::class, 'show']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     Route::middleware(['role:user,admin'])->group(function () {
         Route::post('/payments', [PaymentController::class, 'store']);
         Route::put('/payments/{id}', [PaymentController::class, 'update']);
@@ -59,6 +59,6 @@ Route::middleware(['auth:api'])->group(function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
