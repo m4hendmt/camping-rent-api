@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\Api\ItemController;
+use App\Http\Controllers\Api\AuthController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -53,4 +54,11 @@ Route::middleware(['auth:api'])->group(function () {
     Route::middleware(['role:admin'])->group(function () {
         Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->whereNumber('id');
     });
+});
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
